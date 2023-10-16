@@ -4,25 +4,27 @@ import reactLogo from '../images/react.svg'
 import '../styles/App.scss'
 import { useEffect } from 'react';
 
+
 function App() {
 
   const [countries, setCountries] = useState([]);
 
   useEffect (()=> {
-    fetch('https://restcountries.com/v3.1/all?fields=name,capital,flag,continents')
+    fetch('https://restcountries.com/v3.1/all?fields=name,capital,flag,continents,cca2')
     .then((response) => response.json())
     .then ((data) =>{
       setCountries(data)
+
     })
   },[])
  
   const renderCountries = ()=> {
     return countries.map((eachCountry, i) =>
-    (<li>
-      <p>Name: {eachCountry.name}</p>
-      <p>Capital:{eachCountry.capital}</p>
-      <p>Flag:</p>
-      <p>Continent:</p>
+    (<li className='listContries__item' key={i}>
+      <p>Name: {eachCountry.name.common}</p>
+      <p>Capital: {eachCountry.capital}</p>
+      <p>Flag: {eachCountry.flag}</p>
+      <p>Continent: {eachCountry.continents}</p>
     </li>
 
     ))
@@ -32,6 +34,7 @@ function App() {
     <>
    <header>
     <h1>Country Info App</h1>
+    <ul>{renderCountries()}</ul>
    </header>
    </>
   )
