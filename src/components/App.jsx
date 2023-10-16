@@ -8,6 +8,7 @@ function App() {
 
   const [countries, setCountries] = useState([]);
   const [searchCountries, setSearchCountries] = useState('');
+  const [selectSearch, setSelectSearch] = useState("");
 
   useEffect(() => {
     fetch('https://restcountries.com/v3.1/all?fields=name,capital,flag,continents,cca2')
@@ -26,12 +27,16 @@ function App() {
     setSearchCountries(ev.target.value);
   };
 
+  const handleSelectSearch = (ev) => {
+    setSelectSearch(ev.target.value);
+  };
 
   const renderCountries = () => {
     return countries
       .filter((eachCountry) =>
-        eachCountry.name.toLowerCase().includes(searchCountries.toLocaleLowerCase())
-      )
+        eachCountry.name.common.toLowerCase().includes(searchCountries.toLocaleLowerCase()) ||
+        eachCountry.continents.includes(selectSearch))
+      
       .map((eachCountry, i) =>
       (<li className='listContries__item' key={i}>
         <p>Name: {eachCountry.name.common}</p>
@@ -60,7 +65,12 @@ function App() {
 
           />
           <label htmlFor="">By Continent</label>
-          <select id="continentSelect">
+          <select
+           name="continent"
+           id="continent"
+           onChange={handleSelectSearch}
+           value={selectSearch}
+           >
             <option value="all">Todos los continentes</option>
             <option value="Africa">África</option>
             <option value="Asia">Asia</option>
@@ -70,7 +80,6 @@ function App() {
             <option value="southAmerica">South America</option>
 
           </select>
-
 
         </form>
 
